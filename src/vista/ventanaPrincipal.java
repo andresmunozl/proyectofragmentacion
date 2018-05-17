@@ -5,6 +5,9 @@
  */
 package vista;
 
+import datos.Conexion;
+import java.sql.Connection;
+
 /**
  *
  * @author USUARIO
@@ -38,6 +41,11 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         btnSumaProductos.setText("Suma total de precios");
 
         btnListarTodosProductos.setText("Listar productos");
+        btnListarTodosProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnListarTodosProductosMouseClicked(evt);
+            }
+        });
         btnListarTodosProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnListarTodosProductosActionPerformed(evt);
@@ -86,6 +94,18 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     private void btnListarTodosProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarTodosProductosActionPerformed
      
     }//GEN-LAST:event_btnListarTodosProductosActionPerformed
+
+    private void btnListarTodosProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnListarTodosProductosMouseClicked
+        Conexion conexion = new Conexion();
+        
+        Connection co = conexion.crearConexion();
+        
+        if(co == null){
+            System.out.println("No Connectado");
+        }else{
+            System.out.println("Conectado");
+        }
+    }//GEN-LAST:event_btnListarTodosProductosMouseClicked
 
     /**
      * @param args the command line arguments
