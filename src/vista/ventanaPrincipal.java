@@ -19,8 +19,7 @@ import javax.swing.table.DefaultTableModel;
 public class ventanaPrincipal extends javax.swing.JFrame {
     private AccesoDatos datos;
     private Conexion conexion ;
-    private Connection conect ;
-
+    private Connection conect;
     /**
      * Creates new form ventanaPrincipal
      */
@@ -28,9 +27,8 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     {
         initComponents();
         conexion = new Conexion();
-        conect = conexion.crearConexion();
-        datos.establecerConexion(conect);
- 
+        conect  = conexion.crearConexion(); 
+        
     }
 
     
@@ -124,11 +122,20 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnListarTodosProductosActionPerformed
 
     private void btnListarTodosProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnListarTodosProductosMouseClicked
+         
         
-        ResultSet rs;
-        rs = datos.consultaProductos();
+        if(conect != null)
+        {
+            System.out.println("Exito");
+            datos.establecerConexion(conect);
+            //ResultSet rs;
+            //rs = datos.consultaProductos();
+            //llenarJTableValores(rs);
+        }
+        else
+            System.out.println("Fallo");
         
-        llenarJTableValores(rs);
+        
     }//GEN-LAST:event_btnListarTodosProductosMouseClicked
 
     

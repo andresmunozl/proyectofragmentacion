@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
  */
 public class AccesoDatos {
     
-    private Connection conexion;
+     private Connection conexion;
     
     public AccesoDatos()
     {
@@ -21,7 +21,7 @@ public class AccesoDatos {
     }   
     public void establecerConexion(Connection con)
     {
-        conexion = con;
+          conexion = con;
     }
     public boolean cerrarConexion()
     {    
@@ -55,8 +55,7 @@ public class AccesoDatos {
     {
         ResultSet rs;
         //creo consulta para enviar a select son 3 columnas que retorna
-        String consulta =  "Select * "
-                         + "from 'producto'";
+        String consulta =  "SELECT * FROM 'producto'";
         
         //utilizo metodo para ejecutar select
         rs = ejecutarSELECT(consulta);
