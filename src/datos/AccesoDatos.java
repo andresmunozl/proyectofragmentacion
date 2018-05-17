@@ -13,27 +13,15 @@ import javax.swing.JOptionPane;
  */
 public class AccesoDatos {
     
-    private String cadenaConexion;
     private Connection conexion;
     
     public AccesoDatos()
     {
-        cadenaConexion = "";
         conexion = null;
     }   
-    public boolean establecerConexion(String usuario, String host, int port, String pass)
+    public void establecerConexion(Connection con)
     {
-        try
-        {
-            cadenaConexion = "jdbc:oracle:thin:@"+host+":"+port+":xe";
-            this.conexion = DriverManager.getConnection(cadenaConexion, usuario, pass);
-            return true;
-        }
-        catch(Exception ex)
-        {  
-          
-            return false;
-        }    
+        conexion = con;
     }
     public boolean cerrarConexion()
     {    
@@ -63,7 +51,7 @@ public class AccesoDatos {
         }
     }
     
-    public ResultSet consultaProducto()    
+    public ResultSet consultaProductos()    
     {
         ResultSet rs;
         //creo consulta para enviar a select son 3 columnas que retorna
