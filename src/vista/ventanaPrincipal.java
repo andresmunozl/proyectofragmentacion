@@ -1,10 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package vista;
 
+import datos.AccesoDatos;
 import datos.Conexion;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -20,6 +17,9 @@ import javax.swing.table.DefaultTableModel;
  * @author USUARIO
  */
 public class ventanaPrincipal extends javax.swing.JFrame {
+    private AccesoDatos datos;
+    private Conexion conexion ;
+    private Connection conect ;
 
     /**
      * Creates new form ventanaPrincipal
@@ -27,7 +27,8 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     public ventanaPrincipal() {
         initComponents();
         conexion = new Conexion();
-        
+        conect = conexion.crearConexion();
+ 
     }
 
     /**
@@ -179,10 +180,6 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         return new DefaultTableModel(data,columnNames);
     }
     
-    
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -216,8 +213,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         });
     }
     
-    private Conexion conexion ;
-    private Connection conect ;
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsultaPromedioCategoria;
     private javax.swing.JButton btnListarProductoPorCategoria;
