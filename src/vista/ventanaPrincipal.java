@@ -7,6 +7,13 @@ package vista;
 
 import datos.Conexion;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,6 +26,8 @@ public class ventanaPrincipal extends javax.swing.JFrame {
      */
     public ventanaPrincipal() {
         initComponents();
+        conexion = new Conexion();
+        
     }
 
     /**
@@ -35,6 +44,8 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         btnListarProductoPorCategoria = new javax.swing.JButton();
         btnConsultaPromedioCategoria = new javax.swing.JButton();
         btnProductoMasCaro = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtableDatos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -58,33 +69,51 @@ public class ventanaPrincipal extends javax.swing.JFrame {
 
         btnProductoMasCaro.setText("Producto mas caro");
 
+        jtableDatos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jtableDatos);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(79, Short.MAX_VALUE)
+                .addContainerGap(71, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(btnSumaProductos)
-                    .addComponent(btnProductoMasCaro)
-                    .addComponent(btnConsultaPromedioCategoria)
+                    .addComponent(btnListarTodosProductos)
                     .addComponent(btnListarProductoPorCategoria)
-                    .addComponent(btnListarTodosProductos))
-                .addGap(81, 81, 81))
+                    .addComponent(btnConsultaPromedioCategoria)
+                    .addComponent(btnProductoMasCaro)
+                    .addComponent(btnSumaProductos))
+                .addGap(96, 96, 96)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(btnListarTodosProductos)
-                .addGap(37, 37, 37)
-                .addComponent(btnListarProductoPorCategoria)
-                .addGap(33, 33, 33)
-                .addComponent(btnConsultaPromedioCategoria)
-                .addGap(28, 28, 28)
-                .addComponent(btnProductoMasCaro)
-                .addGap(33, 33, 33)
-                .addComponent(btnSumaProductos)
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnListarTodosProductos)
+                        .addGap(47, 47, 47)
+                        .addComponent(btnListarProductoPorCategoria)
+                        .addGap(51, 51, 51)
+                        .addComponent(btnConsultaPromedioCategoria)
+                        .addGap(40, 40, 40)
+                        .addComponent(btnProductoMasCaro)
+                        .addGap(50, 50, 50)
+                        .addComponent(btnSumaProductos)))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
@@ -92,21 +121,65 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnListarTodosProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarTodosProductosActionPerformed
-     
+ 
     }//GEN-LAST:event_btnListarTodosProductosActionPerformed
 
     private void btnListarTodosProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnListarTodosProductosMouseClicked
-        Conexion conexion = new Conexion();
+       
         
-        Connection co = conexion.crearConexion();
-        
-        if(co == null){
-            System.out.println("No Connectado");
-        }else{
-            System.out.println("Conectado");
-        }
+           
     }//GEN-LAST:event_btnListarTodosProductosMouseClicked
 
+    
+    
+    
+    
+    //METODOS PARA EL LLENADO DE LA JTABLEDATOS DONDE SE VISUALIZARAN RESULTADOS
+    public void llenarJTableValores(ResultSet resulSet)
+    {
+        construirJTable(resulSet,jtableDatos);
+    }
+    public void construirJTable(ResultSet resulSet, JTable tbl)
+    {
+        try
+        {
+            tbl.setModel(modeloTabla(resulSet));
+            if(tbl.getRowCount()==0)
+            {
+                JOptionPane.showMessageDialog(this,"no existen valores");
+            }
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(this, ex);
+        }
+    }
+    private static DefaultTableModel modeloTabla(ResultSet rs) throws SQLException
+    {
+        ResultSetMetaData metaData = rs.getMetaData();
+        
+        Vector<String>columnNames = new Vector<String>();
+        int columnCount = metaData.getColumnCount();
+        for(int column = 1; column <=columnCount; column++)
+        {
+           columnNames.add(metaData.getColumnName(column));
+        }
+        Vector<Vector<Object>>data = new Vector<Vector<Object>>();
+        while(rs.next())
+        {
+            Vector<Object> vector = new Vector<Object>();
+            for(int columnIndex = 1; columnIndex<=columnCount; columnIndex++)
+            {
+                vector.add(rs.getObject(columnIndex));
+                
+            }
+            data.add(vector);
+        }
+        //System.out.println(metaData.getColumnCount());
+        return new DefaultTableModel(data,columnNames);
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -137,16 +210,21 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                
                 new ventanaPrincipal().setVisible(true);
             }
         });
     }
-
+    
+    private Conexion conexion ;
+    private Connection conect ;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsultaPromedioCategoria;
     private javax.swing.JButton btnListarProductoPorCategoria;
     private javax.swing.JButton btnListarTodosProductos;
     private javax.swing.JButton btnProductoMasCaro;
     private javax.swing.JButton btnSumaProductos;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jtableDatos;
     // End of variables declaration//GEN-END:variables
 }

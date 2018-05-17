@@ -47,6 +47,7 @@ public class AccesoDatos {
             return false;
         }
     }
+    
     public ResultSet ejecutarSELECT(String consulta)
     {
         ResultSet rs;
@@ -60,6 +61,18 @@ public class AccesoDatos {
         {
             return null;
         }
+    }
+    
+    public ResultSet consultaProducto()    
+    {
+        ResultSet rs;
+        //creo consulta para enviar a select son 3 columnas que retorna
+        String consulta =  "Select * "
+                         + "from 'producto'";
+        
+        //utilizo metodo para ejecutar select
+        rs = ejecutarSELECT(consulta);
+        return rs;
     }
 
 }
