@@ -4,11 +4,9 @@ package vista;
 import datos.AccesoDatos;
 import datos.Conexion;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,42 +19,22 @@ import javax.swing.table.DefaultTableModel;
  * @author USUARIO
  */
 public class ventanaPrincipal extends javax.swing.JFrame {
-    private AccesoDatos datos;
-    private Conexion conexion ;
-    private Connection conect;
+    private final AccesoDatos datos;
+    private final Conexion conexion ;
+    private final Connection conect;
     /**
      * Creates new form ventanaPrincipal
      */
-    public ventanaPrincipal() throws SQLException 
+    public ventanaPrincipal() throws SQLException
     {
         initComponents();
         conexion = new Conexion();
         conect  = conexion.crearConexion(); 
-
+        datos = new AccesoDatos();
+        datos.establecerConexion(conect);
     }
     
-    public void mostrarDatos() throws SQLException{
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("CODIGO");
-        modelo.addColumn("PRECIO");
-        modelo.addColumn("CATEGORIA");
-        jtabDatos.setModel(modelo);
-        
-        String []datos = new String[3];
-        
-        Statement consulta = conect.createStatement();
-        ResultSet rs = consulta.executeQuery("select * from producto");
-        
-        while(rs.next()){
-            datos[0]= rs.getString(1);
-            datos[1]= rs.getString(2);
-            datos[2]= rs.getString(3);
-            modelo.addRow(datos);
-            
-        }
-        jtabDatos.setModel(modelo);
-    }
-
+   
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -69,10 +47,20 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         btnProductoMasCaro = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtabDatos = new javax.swing.JTable();
+        btnInsertaMillon = new javax.swing.JButton();
+        jComboBoxCat = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jComboBoxCat2 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnSumaProductos.setText("Suma total de precios");
+        btnSumaProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSumaProductosMouseClicked(evt);
+            }
+        });
 
         btnListarTodosProductos.setText("Listar productos");
         btnListarTodosProductos.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -87,8 +75,23 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         });
 
         btnListarProductoPorCategoria.setText("Listar productos de una categoria");
+        btnListarProductoPorCategoria.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnListarProductoPorCategoriaMouseClicked(evt);
+            }
+        });
+        btnListarProductoPorCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListarProductoPorCategoriaActionPerformed(evt);
+            }
+        });
 
         btnConsultaPromedioCategoria.setText("Promedio precios productos por categoria");
+        btnConsultaPromedioCategoria.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnConsultaPromedioCategoriaMouseClicked(evt);
+            }
+        });
 
         btnProductoMasCaro.setText("Producto mas caro");
 
@@ -102,19 +105,45 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jtabDatos);
 
+        btnInsertaMillon.setBackground(new java.awt.Color(255, 0, 0));
+        btnInsertaMillon.setText("Insertar Millon De Datos");
+        btnInsertaMillon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnInsertaMillonMouseClicked(evt);
+            }
+        });
+
+        jComboBoxCat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3" }));
+
+        jLabel1.setText("Categoria");
+
+        jLabel2.setText("Categoria");
+
+        jComboBoxCat2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(71, Short.MAX_VALUE)
+                .addContainerGap(34, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(btnListarTodosProductos)
-                    .addComponent(btnListarProductoPorCategoria)
-                    .addComponent(btnConsultaPromedioCategoria)
+                    .addComponent(btnInsertaMillon)
+                    .addComponent(btnSumaProductos)
                     .addComponent(btnProductoMasCaro)
-                    .addComponent(btnSumaProductos))
-                .addGap(96, 96, 96)
+                    .addComponent(btnConsultaPromedioCategoria)
+                    .addComponent(btnListarProductoPorCategoria)
+                    .addComponent(btnListarTodosProductos)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(jLabel1)
+                        .addGap(22, 22, 22)
+                        .addComponent(jComboBoxCat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(22, 22, 22)
+                        .addComponent(jComboBoxCat2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -123,18 +152,30 @@ public class ventanaPrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(40, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnListarTodosProductos)
-                        .addGap(47, 47, 47)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jComboBoxCat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnListarProductoPorCategoria)
-                        .addGap(51, 51, 51)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jComboBoxCat2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnConsultaPromedioCategoria)
-                        .addGap(40, 40, 40)
+                        .addGap(62, 62, 62)
                         .addComponent(btnProductoMasCaro)
-                        .addGap(50, 50, 50)
-                        .addComponent(btnSumaProductos)))
-                .addContainerGap(33, Short.MAX_VALUE))
+                        .addGap(37, 37, 37)
+                        .addComponent(btnSumaProductos)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnInsertaMillon)
+                        .addGap(25, 25, 25))))
         );
 
         pack();
@@ -145,18 +186,59 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnListarTodosProductosActionPerformed
 
     private void btnListarTodosProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnListarTodosProductosMouseClicked
-      
-        try {
-            PreparedStatement consul = conect.prepareStatement("CALL InsDatosRand (100);");
-            consul.executeUpdate();
-            Statement consulta = conect.createStatement();
-            ResultSet rs = consulta.executeQuery("select * from producto");
+         
+        
+            ResultSet rs;
+            rs = datos.consultaProductos();
             llenarJTableValores(rs);
-            
+        
+    }//GEN-LAST:event_btnListarTodosProductosMouseClicked
+
+    private void btnInsertaMillonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInsertaMillonMouseClicked
+        try {        
+            datos.insertar1MDatos();
         } catch (SQLException ex) {
             Logger.getLogger(ventanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_btnListarTodosProductosMouseClicked
+    }//GEN-LAST:event_btnInsertaMillonMouseClicked
+
+    private void btnListarProductoPorCategoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnListarProductoPorCategoriaMouseClicked
+
+        //recibo seleccionado del combo box
+        int categoria = 1 + jComboBoxCat.getSelectedIndex();
+
+        ResultSet rs;
+        
+        //genero la consulta de buscar por categoria
+        rs = datos.consultaProductoPorCategoria(String.valueOf(categoria));
+
+        llenarJTableValores(rs);    
+    }//GEN-LAST:event_btnListarProductoPorCategoriaMouseClicked
+
+    private void btnListarProductoPorCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarProductoPorCategoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnListarProductoPorCategoriaActionPerformed
+
+    private void btnConsultaPromedioCategoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnConsultaPromedioCategoriaMouseClicked
+        int categoria = 1 + jComboBoxCat2.getSelectedIndex();
+
+        ResultSet rs;
+        
+        //genero la consulta de buscar por categoria
+        rs = datos.consultaProductoPromedio(String.valueOf(categoria));
+
+        llenarJTableValores(rs);    
+    }//GEN-LAST:event_btnConsultaPromedioCategoriaMouseClicked
+
+    private void btnSumaProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSumaProductosMouseClicked
+        ResultSet rs;
+        
+        //genero la consulta de buscar por categoria
+        rs = datos.consultaProductoSumaPrecio();
+
+        llenarJTableValores(rs);  
+        
+    }//GEN-LAST:event_btnSumaProductosMouseClicked
 
     
     
@@ -232,14 +314,11 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                
-                try {
-                    new ventanaPrincipal().setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(ventanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new ventanaPrincipal().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(ventanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
@@ -247,10 +326,15 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsultaPromedioCategoria;
+    private javax.swing.JButton btnInsertaMillon;
     private javax.swing.JButton btnListarProductoPorCategoria;
     private javax.swing.JButton btnListarTodosProductos;
     private javax.swing.JButton btnProductoMasCaro;
     private javax.swing.JButton btnSumaProductos;
+    private javax.swing.JComboBox<String> jComboBoxCat;
+    private javax.swing.JComboBox<String> jComboBoxCat2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jtabDatos;
     // End of variables declaration//GEN-END:variables
