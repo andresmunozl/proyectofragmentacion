@@ -32,7 +32,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         initComponents();
         conexion = new Conexion();
         conect  = conexion.crearConexion(); 
-        mostrarDatos();
+
     }
     
     public void mostrarDatos() throws SQLException{
@@ -145,24 +145,13 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnListarTodosProductosActionPerformed
 
     private void btnListarTodosProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnListarTodosProductosMouseClicked
-         
-        
-        if(conect != null)
-        {
-            System.out.println("Exito");
-            //datos.establecerConexion(conect);
-            ResultSet rs;
-            //rs = datos.consultaProductos();
-            //llenarJTableValores(rs);
-        }
-        else
-            System.out.println("Fallo");
-        
+      
         try {
-            PreparedStatement consulta = conect.prepareStatement("CALL InsDatosRand (100);");
-            consulta.executeUpdate();
-            mostrarDatos();
-            System.out.println("paso por aquí");
+            PreparedStatement consul = conect.prepareStatement("CALL InsDatosRand (100);");
+            consul.executeUpdate();
+            Statement consulta = conect.createStatement();
+            ResultSet rs = consulta.executeQuery("select * from producto");
+            llenarJTableValores(rs);
             
         } catch (SQLException ex) {
             Logger.getLogger(ventanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
