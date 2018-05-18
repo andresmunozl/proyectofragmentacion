@@ -1,33 +1,40 @@
 package datos;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Vector;
-import javax.swing.JOptionPane;
 
 /*
  * @author Jorge Andres Cordoba
  */
 public class AccesoDatos {
     
-     private Connection conexion;
+     private Connection conect;
+     private PreparedStatement consulta;
     
     public AccesoDatos()
     {
-        conexion = null;
+        conect = null;
     }   
-    public void establecerConexion(Connection con)
+    public void establecerConexion(Connection con) 
     {
-          conexion = con;
+          conect = con;
     }
+    
+    public void insertar1MDatos() throws SQLException    
+    {
+          consulta = conect.prepareStatement("CALL InsDatosRand (100);");
+          consulta.executeUpdate();
+    
+    }
+    
     public boolean cerrarConexion()
     {    
         try
         {
-            this.conexion.close();
+            this.conect.close();
             return true;
         }
         catch(SQLException e)
@@ -36,16 +43,16 @@ public class AccesoDatos {
         }
     }
     
-    public ResultSet ejecutarSELECT(String consulta)
+    public ResultSet ejecutarConsulta(String inConsulta)
     {
         ResultSet rs;
         try
         {
-            Statement stmt = this.conexion.createStatement();
-            rs = stmt.executeQuery(consulta); 
+            Statement stmt = conect.createStatement();
+            rs = stmt.executeQuery(inConsulta);
             return rs;        
         }
-        catch(Exception ex)
+        catch(SQLException ex)
         {
             return null;
         }
@@ -55,11 +62,48 @@ public class AccesoDatos {
     {
         ResultSet rs;
         //creo consulta para enviar a select son 3 columnas que retorna
-        String consulta =  "SELECT * FROM 'producto'";
+        String consulSelect = "select * from producto";
         
         //utilizo metodo para ejecutar select
-        rs = ejecutarSELECT(consulta);
+        rs = ejecutarConsulta(consulSelect);
         return rs;
     }
+    
+    public ResultSet consultaProductoPorCategoria(String categoria)    
+    {
+        ResultSet rs;
+        //creo consulta para enviar a select son 3 columnas que retorna
+        String consulSelect = "select * from producto where categoria = "+categoria;
+        
+        //utilizo metodo para ejecutar select
+        rs = ejecutarConsulta(consulSelect);
+        return rs;
+    }
+    
+    
+    public ResultSet consultaProductoPromedio(String categoria)    
+    {
+        ResultSet rs;
+        //creo consulta para enviar a select son 3 columnas que retorna
+        String consulSelect = "select AVG(precio) Promedio from producto where categoria = "+categoria;
+        
+        //utilizo metodo para ejecutar select
+        rs = ejecutarConsulta(consulSelect);
+        return rs;
+    }
+    
+    public ResultSet consultaProductoSumaPrecio()    
+    {
+        ResultSet rs;
+        //creo consulta para enviar a select son 3 columnas que retorna
+        String consulSelect = "select SUM(precio) Suma_Precios from producto ";
+        
+        //utilizo metodo para ejecutar select
+        rs = ejecutarConsulta(consulSelect);
+        return rs;
+    }
+    
+    
+    
 
 }
