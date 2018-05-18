@@ -4,10 +4,14 @@ package vista;
 import datos.AccesoDatos;
 import datos.Conexion;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -23,12 +27,34 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form ventanaPrincipal
      */
-    public ventanaPrincipal() 
+    public ventanaPrincipal() throws SQLException 
     {
         initComponents();
         conexion = new Conexion();
         conect  = conexion.crearConexion(); 
+        mostrarDatos();
+    }
+    
+    public void mostrarDatos() throws SQLException{
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("CODIGO");
+        modelo.addColumn("PRECIO");
+        modelo.addColumn("CATEGORIA");
+        jtabDatos.setModel(modelo);
         
+        String []datos = new String[3];
+        
+        Statement consulta = conect.createStatement();
+        ResultSet rs = consulta.executeQuery("select * from producto");
+        
+        while(rs.next()){
+            datos[0]= rs.getString(1);
+            datos[1]= rs.getString(2);
+            datos[2]= rs.getString(3);
+            modelo.addRow(datos);
+            
+        }
+        jtabDatos.setModel(modelo);
     }
 
     
@@ -42,7 +68,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         btnConsultaPromedioCategoria = new javax.swing.JButton();
         btnProductoMasCaro = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jtableDatos = new javax.swing.JTable();
+        jtabDatos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,18 +92,15 @@ public class ventanaPrincipal extends javax.swing.JFrame {
 
         btnProductoMasCaro.setText("Producto mas caro");
 
-        jtableDatos.setModel(new javax.swing.table.DefaultTableModel(
+        jtabDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        jScrollPane1.setViewportView(jtableDatos);
+        jScrollPane1.setViewportView(jtabDatos);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -127,15 +150,23 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         if(conect != null)
         {
             System.out.println("Exito");
-            datos.establecerConexion(conect);
-            //ResultSet rs;
+            //datos.establecerConexion(conect);
+            ResultSet rs;
             //rs = datos.consultaProductos();
             //llenarJTableValores(rs);
         }
         else
             System.out.println("Fallo");
         
-        
+        try {
+            PreparedStatement consulta = conect.prepareStatement("CALL InsDatosRand (100);");
+            consulta.executeUpdate();
+            mostrarDatos();
+            System.out.println("paso por aquí");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ventanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnListarTodosProductosMouseClicked
 
     
@@ -145,7 +176,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     //METODOS PARA EL LLENADO DE LA JTABLEDATOS DONDE SE VISUALIZARAN RESULTADOS
     public void llenarJTableValores(ResultSet resulSet)
     {
-        construirJTable(resulSet,jtableDatos);
+        construirJTable(resulSet,jtabDatos);
     }
     public void construirJTable(ResultSet resulSet, JTable tbl)
     {
@@ -215,7 +246,11 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 
-                new ventanaPrincipal().setVisible(true);
+                try {
+                    new ventanaPrincipal().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ventanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -228,6 +263,6 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnProductoMasCaro;
     private javax.swing.JButton btnSumaProductos;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jtableDatos;
+    private javax.swing.JTable jtabDatos;
     // End of variables declaration//GEN-END:variables
 }
