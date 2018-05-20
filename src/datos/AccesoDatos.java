@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 /*
  * @author Jorge Andres Cordoba
@@ -26,9 +27,9 @@ public class AccesoDatos {
     public void insertar1MDatos(String tabla) throws SQLException    
     {
         if(tabla.equals("producto"))
-          consulta = conect.prepareStatement("CALL InsDatosRand (100);");
+          consulta = conect.prepareStatement("CALL InsDatosRand (1000);");
         else
-          consulta = conect.prepareStatement("CALL InsDatosRandProF (100);");
+          consulta = conect.prepareStatement("CALL InsDatosRandProF (1000);");
         
             
           consulta.executeUpdate();
@@ -36,8 +37,10 @@ public class AccesoDatos {
     }
     
     public void copiarDatosFragmentada() throws SQLException{
+        
         consulta = conect.prepareStatement("CALL `copyToProd_f`();");
         consulta.executeUpdate();
+        
     }
     
     public boolean cerrarConexion()

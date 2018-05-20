@@ -275,13 +275,16 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnProductoMasCaroMouseClicked
 
     private void btnCopiarDatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCopiarDatosMouseClicked
-        
+        long tiempoTotal=0;
+        long tiempoInicial= System.currentTimeMillis();
         try {        
             datos.copiarDatosFragmentada();
             JOptionPane.showMessageDialog(null, "Se copiaron los datos correctamente.");
         } catch (SQLException ex) {
             Logger.getLogger(ventanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
+        tiempoTotal = System.currentTimeMillis() - tiempoInicial;
+        JOptionPane.showMessageDialog(null, "La consulta tardó: "+tiempoTotal);
     }//GEN-LAST:event_btnCopiarDatosMouseClicked
 
     
