@@ -23,7 +23,7 @@ public class AccesoDatos {
           conect = con;
     }
     
-    public void insertar1MDatos() throws SQLException    
+    public void insertar1MDatos(String tabla) throws SQLException    
     {
           consulta = conect.prepareStatement("CALL InsDatosRand (100);");
           consulta.executeUpdate();
@@ -58,22 +58,22 @@ public class AccesoDatos {
         }
     }
     
-    public ResultSet consultaProductos()    
+    public ResultSet consultaProductos(String tabla)    
     {
         ResultSet rs;
         //creo consulta para enviar a select son 3 columnas que retorna
-        String consulSelect = "select * from producto";
+        String consulSelect = "select * from "+tabla;
         
         //utilizo metodo para ejecutar select
         rs = ejecutarConsulta(consulSelect);
         return rs;
     }
     
-    public ResultSet consultaProductoPorCategoria(String categoria)    
+    public ResultSet consultaProductoPorCategoria(String categoria,String tabla)    
     {
         ResultSet rs;
         //creo consulta para enviar a select son 3 columnas que retorna
-        String consulSelect = "select * from producto where categoria = "+categoria;
+        String consulSelect = "select * from "+tabla+" where categoria = "+categoria;
         
         //utilizo metodo para ejecutar select
         rs = ejecutarConsulta(consulSelect);
@@ -81,22 +81,22 @@ public class AccesoDatos {
     }
     
     
-    public ResultSet consultaProductoPromedio(String categoria)    
+    public ResultSet consultaProductoPromedio(String categoria, String tabla)    
     {
         ResultSet rs;
         //creo consulta para enviar a select son 3 columnas que retorna
-        String consulSelect = "select AVG(precio) Promedio from producto where categoria = "+categoria;
+        String consulSelect = "select AVG(precio) Promedio from "+tabla+" where categoria = "+categoria;
         
         //utilizo metodo para ejecutar select
         rs = ejecutarConsulta(consulSelect);
         return rs;
     }
     
-    public ResultSet consultaProductoSumaPrecio()    
+    public ResultSet consultaProductoSumaPrecio(String tabla)    
     {
         ResultSet rs;
         //creo consulta para enviar a select son 3 columnas que retorna
-        String consulSelect = "select SUM(precio) Suma_Precios from producto ";
+        String consulSelect = "select SUM(precio) Suma_Precios from "+tabla;
         
         //utilizo metodo para ejecutar select
         rs = ejecutarConsulta(consulSelect);
