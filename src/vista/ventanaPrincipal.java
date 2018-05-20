@@ -97,6 +97,11 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         });
 
         btnProductoMasCaro.setText("Producto mas caro");
+        btnProductoMasCaro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnProductoMasCaroMouseClicked(evt);
+            }
+        });
 
         jtabDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -244,6 +249,17 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         llenarJTableValores(rs);  
         
     }//GEN-LAST:event_btnSumaProductosMouseClicked
+
+    private void btnProductoMasCaroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProductoMasCaroMouseClicked
+       int categoria = 1 + jComboBoxCat.getSelectedIndex();
+
+        ResultSet rs;
+        
+        //genero la consulta de buscar por categoria, y la tabla que esta en la parte superior
+        rs = datos.consultaProductoCaro(String.valueOf(categoria), tablas[jComboTabla.getSelectedIndex()]);
+
+        llenarJTableValores(rs);  
+    }//GEN-LAST:event_btnProductoMasCaroMouseClicked
 
     
     
