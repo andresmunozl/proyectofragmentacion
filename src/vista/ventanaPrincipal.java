@@ -217,9 +217,12 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnListarTodosProductosMouseClicked
 
     private void btnInsertaMillonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInsertaMillonMouseClicked
+        long tiempoTotal=0;
+        long tiempoInicial= System.currentTimeMillis();
         try {        
             datos.insertar1MDatos(tablas[jComboTabla.getSelectedIndex()]);
-            JOptionPane.showMessageDialog(null, "Se llenaron los datos correctamente.");
+            tiempoTotal = System.currentTimeMillis() - tiempoInicial;
+            JOptionPane.showMessageDialog(null, "Se llenaron los datos correctamente.\nLa consulta tardó: "+tiempoTotal+ "Milisegundos");
         } catch (SQLException ex) {
             Logger.getLogger(ventanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -279,12 +282,12 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         long tiempoInicial= System.currentTimeMillis();
         try {        
             datos.copiarDatosFragmentada();
-            JOptionPane.showMessageDialog(null, "Se copiaron los datos correctamente.");
+            tiempoTotal = System.currentTimeMillis() - tiempoInicial;
+            JOptionPane.showMessageDialog(null, "Se copiaron los datos correctamente.\nLa consulta tardó: "+tiempoTotal+ "Milisegundos");
         } catch (SQLException ex) {
             Logger.getLogger(ventanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        tiempoTotal = System.currentTimeMillis() - tiempoInicial;
-        JOptionPane.showMessageDialog(null, "La consulta tardó: "+tiempoTotal);
+        
     }//GEN-LAST:event_btnCopiarDatosMouseClicked
 
     
