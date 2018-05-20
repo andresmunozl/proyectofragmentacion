@@ -35,6 +35,11 @@ public class AccesoDatos {
     
     }
     
+    public void copiarDatosFragmentada() throws SQLException{
+        consulta = conect.prepareStatement("CALL `copyToProd_f`();");
+        consulta.executeUpdate();
+    }
+    
     public boolean cerrarConexion()
     {    
         try

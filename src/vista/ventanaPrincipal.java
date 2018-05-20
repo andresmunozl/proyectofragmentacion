@@ -55,6 +55,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jComboTabla = new javax.swing.JComboBox<>();
+        btnCopiarDatos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -129,6 +130,13 @@ public class ventanaPrincipal extends javax.swing.JFrame {
 
         jComboTabla.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN FRAGMENTAR", "FRAGMENTADA" }));
 
+        btnCopiarDatos.setText("Copiar Datos en tabla fragmentada");
+        btnCopiarDatos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCopiarDatosMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -153,9 +161,12 @@ public class ventanaPrincipal extends javax.swing.JFrame {
                             .addComponent(btnConsultaPromedioCategoria)
                             .addComponent(btnProductoMasCaro))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 547, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnInsertaMillon))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnInsertaMillon)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCopiarDatos)))
                 .addGap(32, 32, 32))
         );
         layout.setVerticalGroup(
@@ -165,7 +176,8 @@ public class ventanaPrincipal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnInsertaMillon))
+                    .addComponent(btnInsertaMillon)
+                    .addComponent(btnCopiarDatos))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(19, 19, 19)
@@ -262,6 +274,16 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         llenarJTableValores(rs);  
     }//GEN-LAST:event_btnProductoMasCaroMouseClicked
 
+    private void btnCopiarDatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCopiarDatosMouseClicked
+        
+        try {        
+            datos.copiarDatosFragmentada();
+            JOptionPane.showMessageDialog(null, "Se copiaron los datos correctamente.");
+        } catch (SQLException ex) {
+            Logger.getLogger(ventanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnCopiarDatosMouseClicked
+
     
     
     
@@ -348,6 +370,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsultaPromedioCategoria;
+    private javax.swing.JButton btnCopiarDatos;
     private javax.swing.JButton btnInsertaMillon;
     private javax.swing.JButton btnListarProductoPorCategoria;
     private javax.swing.JButton btnListarTodosProductos;
