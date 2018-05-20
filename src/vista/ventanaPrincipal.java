@@ -113,7 +113,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jtabDatos);
 
-        btnInsertaMillon.setBackground(new java.awt.Color(255, 0, 0));
+        btnInsertaMillon.setBackground(new java.awt.Color(102, 102, 255));
         btnInsertaMillon.setText("Insertar Datos");
         btnInsertaMillon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -207,6 +207,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     private void btnInsertaMillonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInsertaMillonMouseClicked
         try {        
             datos.insertar1MDatos(tablas[jComboTabla.getSelectedIndex()]);
+            JOptionPane.showMessageDialog(null, "Se llenaron los datos correctamente.");
         } catch (SQLException ex) {
             Logger.getLogger(ventanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
