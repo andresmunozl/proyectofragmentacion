@@ -27,11 +27,11 @@ public class AccesoDatos {
     public void insertar1MDatos(String tabla) throws SQLException    
     {
         if(tabla.equals("producto"))
-          consulta = conect.prepareStatement("CALL InsDatosRand (1000);");
-        else
-          consulta = conect.prepareStatement("CALL InsDatosRandProF (1000);");
-        
-            
+          consulta = conect.prepareStatement("CALL InsDatosRand (1000000);");
+//        else
+//          consulta = conect.prepareStatement("CALL InsDatosRandProF (1000);");
+//        
+//            
           consulta.executeUpdate();
     
     }
@@ -120,7 +120,7 @@ public class AccesoDatos {
     {
         ResultSet rs;
         //creo consulta para enviar a select son 3 columnas que retorna
-        String consulSelect = "select * from (select codigo from "+tabla+" where categoria ="+categoria+" order by precio desc,codigo ) where rownum <= 1";
+        String consulSelect = "select codigo from "+tabla+" where categoria ="+categoria+" order by precio desc,codigo limit 1";
         
         //utilizo metodo para ejecutar select
         rs = ejecutarConsulta(consulSelect);
